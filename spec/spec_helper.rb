@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'spork'
 
 Spork.prefork do
@@ -32,11 +31,16 @@ Spork.prefork do
     # examples within a transaction, remove the following line or assign false
     # instead of true.
     config.use_transactional_fixtures = true
+
+    ### Part of Spork hack
+    # Emulate initializer set_clear_dependencies_hook in
+    # railties/lib/rails/application/bootstrap.rb
+    ActiveSupport::Dependencies.clear
   end
 end
 
 Spork.each_run do
-  # This code will be run each time you run your specs.
+  First::Application.reload_routes!
 end
 
 # --- Instructions ---
@@ -49,3 +53,4 @@ end
 # - These instructions should self-destruct in 10 seconds.  If they don't,
 #   feel free to delete them.
 #
+
